@@ -1,4 +1,5 @@
 import os
+
 def write_file(working_directory, file_path, content):
     try:
         full_working_path = os.path.abspath(working_directory)

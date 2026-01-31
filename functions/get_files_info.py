@@ -1,4 +1,5 @@
 import os
+
 def get_files_info(working_directory, directory="."):
     try:
         full_working_path = os.path.abspath(working_directory)
