@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 from google.genai import types
 from google.genai import Client
 from config import system_prompt
-from call_functions import available_functions
+from functions.call_functions import available_functions
 
 def main():
     load_dotenv()
@@ -36,8 +36,9 @@ def main():
     print("Response:")
     print(response.text)
 
-    if len(response.function_call) == 0:
-        pass
+    if len(response.function_calls) > 0:
+        for call in response.function_calls:
+            print(f"Calling function: {call.name}({call.args})")
 
 
 if __name__ == "__main__":
