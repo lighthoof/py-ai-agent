@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 from google.genai import types
 from google.genai import Client
 from config import system_prompt
+from call_functions import available_functions
 
 def main():
     load_dotenv()
@@ -23,7 +24,7 @@ def main():
     response = client.models.generate_content(
         model=model, 
         contents=messages,
-        config=types.GenerateContentConfig(system_instruction=system_prompt),
+        config=types.GenerateContentConfig(tools=[available_functions], system_instruction=system_prompt),
         )
     if response.usage_metadata is None:
         raise RuntimeError("Something went wrong, please check your request")
@@ -34,6 +35,9 @@ def main():
         print(f"Response tokens: {response.usage_metadata.candidates_token_count}")
     print("Response:")
     print(response.text)
+
+    if len(response.function_call) == 0:
+        pass
 
 
 if __name__ == "__main__":

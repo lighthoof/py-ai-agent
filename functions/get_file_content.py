@@ -25,3 +25,17 @@ def get_file_content(working_directory, file_path):
         return f'Error: {e}'
     
     return file_contents
+
+schema_get_file_content = types.FunctionDeclaration(
+    name="get_file_content",
+    description="Reads a file in a directory relative to the working directory, reads a maximum of 10000 characters ",
+    parameters=types.Schema(
+        type=types.Type.OBJECT,
+        properties={
+            "file_path": types.Schema(
+                type=types.Type.STRING,
+                description="File path to a file to be read, relative to the working directory",
+            ),
+        },
+    ),
+)
