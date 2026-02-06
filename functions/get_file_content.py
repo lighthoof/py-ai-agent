@@ -32,6 +32,7 @@ schema_get_file_content = types.FunctionDeclaration(
     description="Reads a file in a directory relative to the working directory, reads a maximum of 10000 characters ",
     parameters=types.Schema(
         type=types.Type.OBJECT,
+        required=["file_path"],
         properties={
             "file_path": types.Schema(
                 type=types.Type.STRING,

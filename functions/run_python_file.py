@@ -43,13 +43,15 @@ schema_run_python_file = types.FunctionDeclaration(
     description="Run a python script in the path relative to working directory",
     parameters=types.Schema(
         type=types.Type.OBJECT,
+        required=["file_path"],
         properties={
             "file_path": types.Schema(
                 type=types.Type.STRING,
                 description="File path to a python script to be executed, relative to the working directory",
             ),
             "args": types.Schema(
-                type=types.Type.STRING,
+                type=types.Type.ARRAY,
+                items=types.Schema(type=types.Type.STRING),
                 description="Additional arguments to run the python script with, defaults to None"
             ),
         },
