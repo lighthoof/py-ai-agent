@@ -5,6 +5,7 @@ from google.genai import types
 from google.genai import Client
 from config import system_prompt
 from functions.call_functions import available_functions
+from functions.call_functions import call_function
 
 def main():
     load_dotenv()
@@ -29,16 +30,28 @@ def main():
     if response.usage_metadata is None:
         raise RuntimeError("Something went wrong, please check your request")
 
+    function_results = []
+
+    if len(response.function_calls) > 0:
+        for call in response.function_calls:
+            #print(f"Calling function: {call.name}({call.args})")
+            function_call_result = call_function(call)
+            if not function_call_result.parts:
+                raise Exception(f"No parts in function result -  {call.name} ")
+            if function_call_result.parts[0].function_response == None:
+                raise Exception(f"No response from function call - {call.name}")
+            if function_call_result.parts[0].function_response.response == None:
+                raise Exception(f"No response from function call - {call.name}")
+            function_results.append(function_call_result.parts[0])
+
     if args.verbose:
         print("User prompt: ", args.user_prompt)
         print(f"Prompt tokens: {response.usage_metadata.prompt_token_count}")
         print(f"Response tokens: {response.usage_metadata.candidates_token_count}")
+        print(f"-> {function_call_result.parts[0].function_response.response}")
     print("Response:")
     print(response.text)
-
-    if len(response.function_calls) > 0:
-        for call in response.function_calls:
-            print(f"Calling function: {call.name}({call.args})")
+            
 
 
 if __name__ == "__main__":
